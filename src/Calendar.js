@@ -1,15 +1,22 @@
 import React, {Component} from 'react';
 import Header from './Calendar/Header';
 import Dates from './Calendar/Dates';
+import {Link} from 'react-router-dom';
 import moment from 'moment';
-// import {Route, Switch, Link} from 'react-router-dom';
 
 class Calendar extends Component{
     constructor(props){
         super(props);
+        var {props: {year, month}} = this;
+        if(month>12){
+            month = null;
+        }
+        if(!(year >= 1 && year<=3000)){
+            year = null;
+        }
         this.state = {
-            year: moment().year(),
-            month: moment().month()
+            year: year || moment().year(),
+            month: month-1 || moment().month()+1
         };
         this.datesArr = [[],[],[],[],[],[],[]];
         
@@ -72,12 +79,13 @@ class Calendar extends Component{
         // const {props: {match: {params:  {year, month}}}} = this;
         // console.log("year: ", year, "month: ", month)
         // console.log(this.props);
-        this.update();
+        // this.update();
         return(
             <div className="Calendar">
                 {/* <Link to={`/${this.state.year}`}><button onClick={this.handleChangeBackward}><i className="fa fa-arrow-left" aria-hidden="true"></i></button></Link> */}
                 <Header year={this.state.year} month={this.state.month} passYear={this.changeYear} passMonth={this.changeMonth}/>
                 {/* <button onClick={}><i class="fa fa-arrow-right" aria-hidden="true"></i></button>       */}
+                <Link to={`/year/${this.state.year}/month/${this.state.month}`} onClick={this.update}>Sumbit</Link>
                 <table>
                     <thead>
                         <tr id="nameDays">

@@ -1,3 +1,7 @@
+*{
+    box-sizing: border-box;
+}
+
 thead, tbody{
     display: flex;
     flex-direction: row;
@@ -36,4 +40,12 @@ tr td h4{
 tr td p{
     font-size: 48px;
     color: green;
+}
+
+button{
+    margin-left: 1px;
+    overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  min-width:1px;
 }

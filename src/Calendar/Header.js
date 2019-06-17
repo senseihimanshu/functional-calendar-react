@@ -32,7 +32,7 @@ class Header extends Component{
         return(
             <div className="Header">
                 <select id="year" defaultValue={this.props.year} onChange={this.handleYear}>{yearsList}</select>
-                <select id="month" defaultValue={moment().month(this.props.month).format("MMMM")} onChange={this.handleMonth}>{monthsList}</select>
+                <select id="month" defaultValue={moment().month(this.props.month-1).format("MMMM")} onChange={this.handleMonth}>{monthsList}</select>
             </div>
         );
     }

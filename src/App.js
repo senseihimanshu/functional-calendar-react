@@ -1,7 +1,8 @@
 import React, {Component} from 'react';
-// import {Route} from 'react-router-dom';
+import {Route, Switch} from 'react-router-dom';
 import './App.css';
 import Calendar from './Calendar';
+import Four04 from './404/404';
 
 class App extends Component {
   // constructor(props){
@@ -21,10 +22,12 @@ class App extends Component {
   render (){
     return(
       <div className="App">
-          {/* <Route path={`/:year/:month`} component={Calendar} /> */}
-          <Calendar />
+          <Switch>
+            <Route exact path={`/year/:year/month/:month`} render={routeProps => <Calendar year={routeProps.match.params.year} month={routeProps.match.params.month}/> } />
+            <Route exact path={'/'} component={Calendar}/>
+            <Route component={Four04}/>
+          </Switch>
       </div>)
-    
   };
 }
 

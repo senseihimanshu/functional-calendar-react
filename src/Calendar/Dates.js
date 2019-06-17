@@ -1,8 +1,16 @@
 import React, {Component} from 'react';
 import './Dates.css';
+import AddForm from './AddForm'
 // import moment from 'moment';
 
 class Dates extends Component{
+    constructor(props){
+        super(props);
+        this.state = {
+            show: false
+        }
+        // this.toggleShow = this.toggleShow.bind(this);
+    }
 
     // makeCells(row, col){
     //     return <td className={`column-${row} row-${col}`}></td>;       
@@ -35,7 +43,8 @@ class Dates extends Component{
     render(){
         return(
             <tr className="Dates">
-                {this.props.datesArr.map((current) => <td key={current}><p>{current}</p>{current!=='-'?<button><i className="fa fa-plus" aria-hidden="true"></i></button> : '-'}<h4>{this.props.day}</h4></td>)}
+                {this.props.datesArr.map((current) => <td key={current}><p>{current}</p>{current!=='-'?<AddForm /> : '-'}<h4>{this.props.day}</h4>
+                </td>)}
             </tr>
         );
     }
