@@ -2,35 +2,82 @@ import React, {Component} from 'react';
 import Header from './Calendar/Header';
 import Dates from './Calendar/Dates';
 import moment from 'moment';
+// import {Route, Switch, Link} from 'react-router-dom';
 
 class Calendar extends Component{
     constructor(props){
         super(props);
-        // this.state = {
-        //     year: 2019,
-        //     month: 6
-        // };
-        this.datesArr = [[],[],[],[],[],[],[]]; 
+        this.state = {
+            year: moment().year(),
+            month: moment().month()
+        };
+        this.datesArr = [[],[],[],[],[],[],[]];
+        
+        this.changeMonth = this.changeMonth.bind(this);
+        this.changeYear = this.changeYear.bind(this);
+        this.update = this.update.bind(this);
     }
 
     componentWillMount(){
-        var date;
-        for(let t = 0; t<moment('2019/06/01').day(); t++){
-            this.datesArr[t].push('-');    
+        let date = new Date(`${this.state.year}/${moment().month(this.state.month).format("M")}/1`);
+        for(let t = 0; t<moment(`${this.state.year}/${this.state.month}/01`).day(); t++){
+            this.datesArr[t].push('-');
         }
-        for(let i = 1; i<=moment().daysInMonth(); i++){
-            date = new Date(`2019/06/${i}`);
+        for(let i = 1; i<=moment(date).daysInMonth(); i++){
+            date = new Date(`${this.state.year}/${this.state.month}/${i}`);
             console.log(moment(date).day());
             this.datesArr[moment(date).day()].push(i);
         } 
         console.log(this.datesArr);
     }
 
-    render(){
+    changeMonth(changedMonth){
+        console.log(changedMonth);
+        this.setState({
+            month: changedMonth
+        });
+    }
 
+    changeYear(changedYear){
+        console.log(changedYear);
+        this.setState({
+            year: changedYear
+        });
+    }
+
+    update(){
+        this.datesArr = [[],[],[],[],[],[],[]];
+        let date = new Date(`${this.state.year}/${moment().month(this.state.month).format("M")}/1`);
+        for(let t = 0; t<moment(`${this.state.year}/${moment().month(this.state.month).format("M")}/01`).day(); t++){
+            this.datesArr[t].push('-');
+        }
+        for(let i = 1; i<=moment(date).daysInMonth(); i++){
+            date = new Date(`${this.state.year}/${moment().month(this.state.month).format("M")}/${i}`);
+            this.datesArr[moment(date).day()].push(i);
+        } 
+        console.log(moment(date).daysInMonth());
+        console.log(moment().month(this.state.month).format("MMMM"));
+        console.log(this.state.year);
+    }
+
+    // componentDidUpdate(){
+    //     const {props: {match: {params:  {year, month}}}} = this;
+    //     this.setState({
+    //         year: year,
+    //         month: month
+    //     })
+    // }
+
+    render(){
+        // const {props: {match: {params:  {year, month}}}} = this;
+        // console.log("year: ", year, "month: ", month)
+        // console.log(this.props);
+        this.update();
         return(
             <div className="Calendar">
-                <Header />         
+                {/* <Link to={`/${this.state.year}`}><button onClick={this.handleChangeBackward}><i className="fa fa-arrow-left" aria-hidden="true"></i></button></Link> */}
+                <Header year={this.state.year} month={this.state.month} passYear={this.changeYear} passMonth={this.changeMonth}/>
+                {/* <button onClick={}><i class="fa fa-arrow-right" aria-hidden="true"></i></button>       */}
                 <table>
                     <thead>
                         <tr id="nameDays">
@@ -53,9 +100,15 @@ class Calendar extends Component{
                         <Dates datesArr={this.datesArr[6]} day="Saturday"/>
                     </tbody>
                 </table>
+                
             </div>
         );
     }
 }
 
 export default Calendar;
+
+//<Switch>
+/* <Route exact path={`/${this.state.year}`} component={()=><Calendar currentYear={this.state.year} changeYear={this.handleYear}/>} />
+{/* <Route exact path='/year/month' component={()=><Calendar changeYear={this.handleYear}/>} /> */
+// </Switch> */}

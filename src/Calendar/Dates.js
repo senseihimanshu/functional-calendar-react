@@ -35,8 +35,7 @@ class Dates extends Component{
     render(){
         return(
             <tr className="Dates">
-                {this.props.datesArr.map((current) => <td><p>{current}</p><h4>{this.props.day}</h4></td>)}
-
+                {this.props.datesArr.map((current) => <td key={current}><p>{current}</p>{current!=='-'?<button><i className="fa fa-plus" aria-hidden="true"></i></button> : '-'}<h4>{this.props.day}</h4></td>)}
             </tr>
         );
     }

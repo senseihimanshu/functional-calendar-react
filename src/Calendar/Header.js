@@ -1,18 +1,38 @@
 import React, {Component} from 'react';
 import moment from 'moment';
+import './Header.css';
 
 class Header extends Component{
-    static defaultProps = {
-        year: moment().year(),
-        month: moment().format('MMMM')
+
+    constructor(props){
+        super(props);
+        this.handleYear = this.handleYear.bind(this);
+        this.handleMonth = this.handleMonth.bind(this);
+    }
+
+    handleYear(e){
+        this.props.passYear(e.target.value);
+    }
+
+    handleMonth(e){
+        this.props.passMonth(e.target.value);
     }
 
     render(){
+        const years = [];
+        const months = [];
+        for(let i = 1; i<=3000; i++){
+            years.push(i);
+        }
+        for(let i = 0; i<12; i++){
+            months.push(i);
+        }
+        const yearsList = years.map(cur => <option key={cur}>{cur}</option>);
+        const monthsList = months.map(cur => <option key={cur}>{moment().month(cur).format("MMMM")}</option>);
         return(
             <div className="Header">
-                <input type="number" id="year" name="year" min="1" max="9999" defaultValue={this.props.year}></input>
-                {this.props.month}
-                {console.log(this.props.year)}
+                <select id="year" defaultValue={this.props.year} onChange={this.handleYear}>{yearsList}</select>
+                <select id="month" defaultValue={moment().month(this.props.month).format("MMMM")} onChange={this.handleMonth}>{monthsList}</select>
             </div>
         );
     }
