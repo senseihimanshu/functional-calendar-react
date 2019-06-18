@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Route, Switch} from 'react-router-dom';
+import {Route, Switch, Redirect} from 'react-router-dom';
 import './App.css';
 import Calendar from './Calendar';
 import Four04 from './404/404';
@@ -23,9 +23,10 @@ class App extends Component {
     return(
       <div className="App">
           <Switch>
-            <Route exact path={`/year/:year/month/:month`} render={routeProps => <Calendar year={routeProps.match.params.year} month={routeProps.match.params.month}/> } />
-            <Route exact path={'/'} component={Calendar}/>
-            <Route component={Four04}/>
+            <Route exact path={`/calendar/:year/:month`} render={routeProps => <Calendar year={routeProps.match.params.year} month={routeProps.match.params.month} {...routeProps}/> } />
+            <Route exact path={'/calendar'} render={(routeProps)=><Calendar {...routeProps}/>}/>
+            <Route exact path={'/'} render={()=> <Redirect to="/calendar"/>}/>
+            <Route component={Four04}/> 
           </Switch>
       </div>)
   };

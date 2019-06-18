@@ -3,26 +3,29 @@ import Header from './Calendar/Header';
 import Dates from './Calendar/Dates';
 import {Link} from 'react-router-dom';
 import moment from 'moment';
+import './Calendar.css'
 
 class Calendar extends Component{
     constructor(props){
         super(props);
         var {props: {year, month}} = this;
-        if(month>12){
+        if(!(month<=12 && typeof parseInt(month) === 'number')){
             month = null;
         }
-        if(!(year >= 1 && year<=3000)){
+        if(!(year >= 1 && year<=3000 && typeof parseInt() === 'number')){
             year = null;
         }
         this.state = {
             year: year || moment().year(),
-            month: month-1 || moment().month()+1
+            month: month || moment().month()+1
         };
         this.datesArr = [[],[],[],[],[],[],[]];
         
         this.changeMonth = this.changeMonth.bind(this);
         this.changeYear = this.changeYear.bind(this);
         this.update = this.update.bind(this);
+        this.updateMonth = this.updateMonth.bind(this);
+        // this.updateYear = this.updateYear.bind(this);
     }
 
     componentWillMount(){
@@ -32,16 +35,15 @@ class Calendar extends Component{
         }
         for(let i = 1; i<=moment(date).daysInMonth(); i++){
             date = new Date(`${this.state.year}/${this.state.month}/${i}`);
-            console.log(moment(date).day());
+            // console.log(moment(date).day());
             this.datesArr[moment(date).day()].push(i);
         } 
-        console.log(this.datesArr);
     }
 
     changeMonth(changedMonth){
-        console.log(changedMonth);
+        console.log(changedMonth, moment().month(changedMonth).format("M"));
         this.setState({
-            month: changedMonth
+            month: moment().month(changedMonth).format("M")
         });
     }
 
@@ -62,9 +64,9 @@ class Calendar extends Component{
             date = new Date(`${this.state.year}/${moment().month(this.state.month).format("M")}/${i}`);
             this.datesArr[moment(date).day()].push(i);
         } 
-        console.log(moment(date).daysInMonth());
-        console.log(moment().month(this.state.month).format("MMMM"));
-        console.log(this.state.year);
+        // console.log(moment(date).daysInMonth());
+        // console.log(moment().month(this.state.month).format("MMMM"));
+        // console.log(this.state.year);
     }
 
     // componentDidUpdate(){
@@ -75,6 +77,61 @@ class Calendar extends Component{
     //     })
     // }
 
+    updateMonth = (type) =>{
+        let {year, month} = this.state;
+        // console.log(year);
+        // console.log(month);
+        // console.log(type);
+    
+        if(type === 'decr'){
+            if(month !== 1){
+                this.setState({
+                    month: --month
+                })
+                this.props.history.push(`/calendar/${year}/${month}`);
+            }else{
+                month = 12;
+                this.setState({
+                    month: month,
+                    year: --year
+                })
+                this.props.history.push(`/calendar/${year}/${month}`);
+            }
+        }
+        else{
+            if(month !== 12){
+                this.setState({
+                    month: ++month
+                });
+                this.props.history.push(`/calendar/${year}/${month}`);
+            }else{
+                month = 1;
+                this.setState({
+                    month: month,
+                    year: ++year
+                });
+                this.props.history.push(`/calendar/${year}/${month}`);
+            }
+        }
+        this.update();
+    }
+
+    // updateYear = (year, month, type) =>{
+    //     if(type === 'decr' && month === 1){
+    //         this.props.history.push(`/calendar/${year}/${month--}`);            
+    //         this.setState({
+    //             year: year--
+    //         })
+    //     }else if(type === 'incr' && month === 12){
+    //         this.setState({
+    //             year: year++
+    //         })
+    //     }
+    //     return this.state.year;
+    // }
+
+    
+
     render(){
         // const {props: {match: {params:  {year, month}}}} = this;
         // console.log("year: ", year, "month: ", month)
@@ -82,10 +139,16 @@ class Calendar extends Component{
         // this.update();
         return(
             <div className="Calendar">
-                {/* <Link to={`/${this.state.year}`}><button onClick={this.handleChangeBackward}><i className="fa fa-arrow-left" aria-hidden="true"></i></button></Link> */}
+                {/* <Link to={`/calendar/${this.updateYear(this.state.year, this.state.month, 'decr')}/${this.updateMonth(this.state.year, this.state.month, 'decr')}`}> */}
+                <button className="decr"><i onClick={() => this.updateMonth('decr')} className="fa fa-arrow-left" aria-hidden="true"></i></button>
+                {/* </Link> */}
+                {/* <Link to={`/calendar/${this.updateYear(this.state.year, this.state.month, 'incr')}/${this.updateMonth.bind(this.state.year, this.state.month, decr)(this.state.year, this.state.month, 'incr')}`}> */}
+                <button className="incr"><i onClick={() => this.updateMonth('incr')} className="fa fa-arrow-right" aria-hidden="true"></i></button>
+                {/* </Link> */}
+                    
                 <Header year={this.state.year} month={this.state.month} passYear={this.changeYear} passMonth={this.changeMonth}/>
                 {/* <button onClick={}><i class="fa fa-arrow-right" aria-hidden="true"></i></button>       */}
-                <Link to={`/year/${this.state.year}/month/${this.state.month}`} onClick={this.update}>Sumbit</Link>
+                <button className="link-submit" onClick={this.update}><Link to={`/calendar/${this.state.year}/${this.state.month}`}>Sumbit</Link></button>
                 <table>
                     <thead>
                         <tr id="nameDays">
